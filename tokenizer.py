@@ -5,71 +5,61 @@ import re
 from nltk.stem import PorterStemmer
 
 class Tokenizer:
-    """Handles tokenization and stemming of text"""
+    """
+    Handles tokenization and stemming of text
+    """
     
     def __init__(self):
         self.stemmer = PorterStemmer()
-        # Pattern to match alphanumeric sequences
+        # Pattern to match alphanumeric sequences (Assignment 3 spec: "all alphanumeric sequences")
         self.token_pattern = re.compile(r'[a-zA-Z0-9]+')
-    
-    def tokenize(self, text: str) -> list:
-        """
-        Extract alphanumeric tokens from text
-        Args:
-            text: raw text string
-        Returns:
-            list of tokens (lowercase, no stemming yet)
-        """
-        if not text:
-            return []
-        
-        # Extract all alphanumeric sequences
-        tokens = self.token_pattern.findall(text)
-        
-        # Convert to lowercase
-        tokens = [token.lower() for token in tokens]
-        
-        return tokens
-    
-    def tokenize_and_stem(self, text: str) -> list:
-        """
-        Extract and stem tokens from text
-        Args:
-            text: raw text string
-        Returns:
-            list of stemmed tokens
-        """
-        tokens = self.tokenize(text)
-        
-        # Apply stemming
-        stemmed_tokens = [self.stemmer.stem(token) for token in tokens]
-        
-        return stemmed_tokens
-    
-    def tokenize_words(self, words: list) -> list:
-        """
-        Tokenize a list of words (from parser)
-        Args:
-            words: list of word strings
-        Returns:
-            list of tokens
-        """
-        tokens = []
-        for word in words:
-            tokens.extend(self.tokenize(word))
-        return tokens
     
     def tokenize_and_stem_words(self, words: list) -> list:
         """
-        Tokenize and stem a list of words (from parser)
+        Tokenize and stem a list of words from parser
+        
+        Process:
+        - Extract alphanumeric sequences
+        - Apply quality filters
+        - Apply Porter stemming
+        - No stop word removal (per assignment specs)
+        
         Args:
-            words: list of word strings
+            words: list of word strings from parser
         Returns:
             list of stemmed tokens
         """
         tokens = []
+        
         for word in words:
-            word_tokens = self.tokenize(word)
-            stemmed = [self.stemmer.stem(token) for token in word_tokens]
-            tokens.extend(stemmed)
+            # Convert to lowercase
+            word_clean = word.lower()
+            
+            # Extract alphanumeric sequences from this word
+            alphanumeric_sequences = self.token_pattern.findall(word_clean)
+            
+            for token in alphanumeric_sequences:
+                # Quality filters:
+                
+                # Skip if empty
+                if not token:
+                    continue
+                
+                # Skip if too short
+                if len(token) < 2:
+                    continue
+                
+                # Skip if digit-only
+                if token.isdigit():
+                    continue
+                
+                # Skip if too long (prevents weird strings/hashes)
+                if len(token) > 30:
+                    continue
+                
+                # Apply Porter stemming
+                stemmed_token = self.stemmer.stem(token)
+                
+                tokens.append(stemmed_token)
+        
         return tokens
