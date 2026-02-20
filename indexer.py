@@ -1,7 +1,6 @@
 
 """
 Main script for building the inverted index from DEV folder
-Usage: python main.py
 """
 
 import os
@@ -19,7 +18,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     """
     parser = HTMLParser()
     tokenizer = Tokenizer()
-    index = InvertedIndex(index_dir=index_dir, memory_threshold=10000)
+    index = InvertedIndex(index_dir=index_dir, memory_threshold=1000)
 
     print(f"Starting indexing from '{data_dir}'...\n")
 
@@ -52,7 +51,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
         index.add_document(url, tokens, important_tokens)
 
         # Progress update every 1000 docs
-        if (i + 1) % 1000 == 0:
+        if (i + 1) % 100 == 0:
             print(f"Processed {i + 1}/{total_files} files...")
 
     # Finalize: flush remaining memory, merge partials, save stats

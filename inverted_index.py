@@ -37,6 +37,7 @@ class InvertedIndex:
         # Statistics
         self.total_docs = 0
         self.unique_tokens = set()
+        self.size_on_disk = 0
         
         # Create index directory
         os.makedirs(self.index_dir, exist_ok=True)
@@ -178,7 +179,8 @@ class InvertedIndex:
         stats = {
             'num_documents': self.total_docs,
             'num_unique_tokens': len(self.unique_tokens),
-            'num_partial_indexes_created': self.partial_index_count
+            'num_partial_indexes_created': self.partial_index_count,
+            'index_size_kb': self.get_index_size_kb()
         }
         
         stats_file = os.path.join(self.index_dir, "statistics.json")
