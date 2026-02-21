@@ -16,9 +16,7 @@ class InvertedIndex:
     
     def __init__(self, index_dir: str = "index_data", memory_threshold: int = 5000): #changed to 5000 from 10k can cahnge later
         """
-        Args:
-            index_dir: directory to store index files
-            memory_threshold: number of documents to process before offloading
+        init everyhitng
         """
         self.index_dir = index_dir
         self.memory_threshold = memory_threshold
@@ -45,10 +43,6 @@ class InvertedIndex:
     def add_document(self, url: str, tokens: List[str], important_tokens: List[str]):
         """
         Add a document to the index
-        Args:
-            url: document URL
-            tokens: list of stemmed tokens from document
-            important_tokens: list of stemmed tokens from important elements
         """
         # Assign document ID
         current_doc_id = self.doc_id
@@ -78,8 +72,8 @@ class InvertedIndex:
     
     def _offload_to_disk(self):
         """
-        Offload current in-memory index to disk as a partial index
-        This is required for the developer option (at least 3 times)
+        Offload current inmemory index to disk as a partial index
+        This is required for the developer option (at least 3 times) REMEMBER
         """
         if not self.index:
             return
@@ -91,8 +85,6 @@ class InvertedIndex:
         
         print(f"Offloading partial index {self.partial_index_count} to disk "
               f"(docs processed: {self.total_docs})...")
-        
-        # Convert defaultdict to regular dict for JSON serialization
         index_to_save = {}
         for term, postings in self.index.items():
             index_to_save[term] = dict(postings)

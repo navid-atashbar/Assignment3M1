@@ -39,22 +39,17 @@ class Tokenizer:
             alphanumeric_sequences = self.token_pattern.findall(word_clean)
             
             for token in alphanumeric_sequences:
-                if not token.isalnum():
+                # if not token.isalnum():
+                #     continue
+                if not token:
                     continue
-                # if not token:
-                #     continue
-                #
+                if len(token) < 2 and token not in ["am", "an", "as", "at", "be", "by", "do", "go", "he", "hi", "if", "in", "is", "it", "me", "my", "no", "of", "on", "or","ox", "so", "to", "up", "us", "we"]:
+                    continue
+                if token.isdigit():
+                    continue
+                if len(token) > 30:
+                    continue
 
-                # if len(token) < 0: #and token not in ["am", "an", "as", "at", "be", "by", "do", "go", "he", "hi", "if", "in", "is", "it", "me", "my", "no", "of", "on", "or","ox", "so", "to", "up", "us", "we"]:
-                #     continue
-                #
-                # if token.isdigit():
-                #     continue
-                #
-                # Skip if too long (prevents weird strings/hashes)
-                # if len(token) > 30:
-                #     continue
-                #
                 # Apply Porter stemming
                 stemmed_token = self.stemmer.stem(token)
                 
