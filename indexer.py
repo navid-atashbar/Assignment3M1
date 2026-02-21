@@ -2,7 +2,7 @@
 """
 Main script for building the inverted index from DEV folder
 """
-
+import json
 import os
 import time
 from parser import HTMLParser
@@ -51,7 +51,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
         index.add_document(url, tokens, important_tokens)
 
         # Progress update every 1000 docs
-        if (i + 1) % 100 == 0:
+        if (i + 1) % 5000 == 0:
             print(f"Processed {i + 1}/{total_files} files...")
 
     # Finalize: flush remaining memory, merge partials, save stats
@@ -66,6 +66,15 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     print(f"Index size on disk: {size_kb:.2f} KB")
     print(f"Index saved to    : {os.path.abspath(index_dir)}/")
     print(f"Time took building : {time.time() - start_time:.2f} seconds")
+    #Write
+    with open("./index_data/statistics.json", "r") as f:
+        stats = json.load(f)
+    stats["time_taken"]= time.time() - start_time
+    with open("./index_data/statistics.json", "w") as f:
+        json.dump(stats, f,indent=2)
+
+
+    with open("./index_data/statistics.json", "a") as f:
 
 
 if __name__ == "__main__":
