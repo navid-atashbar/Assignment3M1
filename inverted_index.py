@@ -150,10 +150,11 @@ class InvertedIndex:
                 else:
                     merged[term] = posting
             del partial_json
+        self.unique_tokens = len(merged)
         final_file = os.path.join(self.index_dir, "final_index.json")
         print(f"Merging final index {final_file}")
         with open(final_file, 'w', encoding='utf-8') as f:
-            json.dump(merged, f, indent=2)
+            json.dump(merged, f)
         del merged
         for partial_filename in self.partial_indexes:
             try:
@@ -166,14 +167,10 @@ class InvertedIndex:
         """
         Save statistics for the report
         """
-        final_index = os.path.join(self.index_dir, "final_index.json")
-        with open(final_index, 'r', encoding='utf-8') as f:
-            len_final_json = json.load(f)
-        count_tokens = len(len_final_json)
-        del len_final_json
+
         stats = {
             'num_documents': self.total_docs,
-            'num_unique_tokens': count_tokens,
+            'num_unique_tokens': self.unique_tokens,
             'num_partial_indexes_created': self.partial_index_count,
             'index_size_kb': self.get_index_size_kb()
         }
