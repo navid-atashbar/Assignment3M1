@@ -1,0 +1,16 @@
+
+-------------------------------------------
+         Assignment 3: M1 Report
+-------------------------------------------
+Group Members: 
+    Navid Atashbar
+    Tawann Alvarez
+    Ryan Sahyoun
+
+Data: 
+
+    Number of Indexed docs            - 55086
+    Number of Unique tokens           - 1066584
+    Number of Partial Indexes Created - 12
+    Total index size (KB)             - 509087.2109375
+-------------------------------------------

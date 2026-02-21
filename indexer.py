@@ -1,5 +1,9 @@
 
 """
+Group Members: 
+    Navid Atashbar 58919360
+    Tawann Alvarez 44662328
+    Ryan Sahyoun 22183231
 Main script for building the inverted index from DEV folder
 """
 import json
