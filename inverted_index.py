@@ -14,7 +14,7 @@ class InvertedIndex:
     Designed for the developer option with 56K+ documents
     """
     
-    def __init__(self, index_dir: str = "index_data", memory_threshold: int = 2500): #changed to 2500 from 10k can cahnge later
+    def __init__(self, index_dir: str = "index_data", memory_threshold: int = 5000): #changed to 5000 from 10k can cahnge later
         """
         Args:
             index_dir: directory to store index files

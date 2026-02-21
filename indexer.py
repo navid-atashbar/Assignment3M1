@@ -18,7 +18,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     """
     parser = HTMLParser()
     tokenizer = Tokenizer()
-    index = InvertedIndex(index_dir=index_dir, memory_threshold=1000)
+    index = InvertedIndex(index_dir=index_dir, memory_threshold=5000)
 
     print(f"Starting indexing from '{data_dir}'...\n")
 
