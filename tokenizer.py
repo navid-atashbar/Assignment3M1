@@ -46,7 +46,7 @@ class Tokenizer:
                     continue
                 
                 # Skip if too short
-                if len(token) < 2:
+                if len(token) < 3 and token not in ["am", "an", "as", "at", "be", "by", "do", "go", "he", "hi", "if", "in", "is", "it", "me", "my", "no", "of", "on", "or","ox", "so", "to", "up", "us", "we"]:
                     continue
                 
                 # Skip if digit-only

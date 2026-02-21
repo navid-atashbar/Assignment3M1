@@ -62,7 +62,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     size_kb = index.get_index_size_kb()
     print(f"\n--- Index Summary ---")
     print(f"Documents indexed : {index.total_docs}")
-    print(f"Unique tokens     : {len(index.unique_tokens)}")
+    # print(f"Unique tokens     : {len(index.unique_tokens)}")
     print(f"Index size on disk: {size_kb:.2f} KB")
     print(f"Index saved to    : {os.path.abspath(index_dir)}/")
     print(f"Time took building : {time.time() - start_time:.2f} seconds")
@@ -72,10 +72,6 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     stats["time_taken"]= time.time() - start_time
     with open("./index_data/statistics.json", "w") as f:
         json.dump(stats, f,indent=2)
-
-
-    with open("./index_data/statistics.json", "a") as f:
-
 
 if __name__ == "__main__":
     build_index(data_dir="./DEV")
