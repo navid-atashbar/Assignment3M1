@@ -1,15 +1,14 @@
-import time
-import os
-from parser import HTMLParser
-from tokenizer import Tokenizer
-from inverted_index import InvertedIndex
+
+import indexer
 from report import generate
 INDEX_PATH = '../index_data'
-def main():
 
+def main():
+    indexer.build_index(data_dir="./DEV")
+    generate(INDEX_PATH)
 
 
 if __name__ == "__main__":
     main()
-    generate(INDEX_PATH)
+
 
