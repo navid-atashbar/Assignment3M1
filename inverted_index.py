@@ -36,7 +36,7 @@ class InvertedIndex:
         
         # Statistics
         self.total_docs = 0
-        self.unique_tokens = set()
+        self.unique_tokens = 0
         self.size_on_disk = 0
         
         # Create index directory
@@ -60,7 +60,7 @@ class InvertedIndex:
         token_freq = defaultdict(int)
         for token in tokens:
             token_freq[token] += 1
-            self.unique_tokens.add(token)
+            # self.unique_tokens.add(token)
         
         # Track which tokens are important
         important_set = set(important_tokens)
@@ -176,9 +176,14 @@ class InvertedIndex:
         """
         Save statistics for the report
         """
+        final_index = os.path.join(self.index_dir, "final_index.json")
+        with open(final_index, 'r', encoding='utf-8') as f:
+            len_final_json = json.load(f)
+        count_tokens = len(len_final_json)
+        del final_index
         stats = {
             'num_documents': self.total_docs,
-            'num_unique_tokens': len(self.unique_tokens),
+            'num_unique_tokens': count_tokens,
             'num_partial_indexes_created': self.partial_index_count,
             'index_size_kb': self.get_index_size_kb()
         }
