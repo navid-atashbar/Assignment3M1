@@ -19,7 +19,6 @@ class HTMLParser:
     def parse_json_file(self, filepath: str) -> Dict:
         """
         Parse a JSON file containing URL, content, and encoding
-        Returns: dict with 'url' and 'content' keys
         """
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
