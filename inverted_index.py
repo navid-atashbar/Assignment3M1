@@ -130,48 +130,38 @@ class InvertedIndex:
         # Save statistics
         self._save_statistics()
         
-        print(f"Index finalized!")
-        print(f"Total documents indexed: {self.total_docs}")
-        print(f"Unique tokens: {len(self.unique_tokens)}")
+        # print(f"Index finalized!")
+        # print(f"Total documents indexed: {self.total_docs}")
+        # print(f"Unique tokens: {self.unique_tokens}")
     
     def _merge_partial_indexes(self):
         """
         Merge all partial indexes into a final index
         """
-        final_index = defaultdict(lambda: defaultdict(dict))
-        
-        # Load and merge each partial index
-        for partial_file in self.partial_indexes:
-            print(f"Merging {partial_file}...")
-            with open(partial_file, 'r', encoding='utf-8') as f:
-                partial_index = json.load(f)
-            
-            for term, postings in partial_index.items():
-                for doc_id, posting_data in postings.items():
-                    # Convert doc_id back to int (JSON converts to string)
-                    doc_id = int(doc_id)
-                    final_index[term][doc_id] = posting_data
-        
-        # Save final merged index
-        final_index_file = os.path.join(self.index_dir, "final_index.json")
-        print(f"Saving final merged index...")
-        
-        # Convert to regular dict
-        final_index_dict = {}
-        for term, postings in final_index.items():
-            final_index_dict[term] = dict(postings)
-        
-        with open(final_index_file, 'w', encoding='utf-8') as f:
-            json.dump(final_index_dict, f)
-        
-        # Clean up partial indexes
-        for partial_file in self.partial_indexes:
+       #CHANGE
+        merged = {}
+        for partial_filename in self.partial_indexes:
+            print(f"Merging partial index {partial_filename}")
+            with open(partial_filename, 'r', encoding='utf-8') as f:
+                partial_json = json.load(f)
+            for term,posting in partial_json.items():
+                if term in merged:
+                    merged[term].update(posting)
+                else:
+                    merged[term] = posting
+            del partial_json
+        final_file = os.path.join(self.index_dir, "final_index.json")
+        print(f"Merging final index {final_file}")
+        with open(final_file, 'w', encoding='utf-8') as f:
+            json.dump(merged, f, indent=2)
+        del merged
+        for partial_filename in self.partial_indexes:
             try:
-                os.remove(partial_file)
-                print(f"Removed {partial_file}")
+                os.remove(partial_filename)
+                print(f"removed partial index {partial_filename}")
+
             except:
                 pass
-    
     def _save_statistics(self):
         """
         Save statistics for the report
@@ -180,7 +170,7 @@ class InvertedIndex:
         with open(final_index, 'r', encoding='utf-8') as f:
             len_final_json = json.load(f)
         count_tokens = len(len_final_json)
-        del final_index
+        del len_final_json
         stats = {
             'num_documents': self.total_docs,
             'num_unique_tokens': count_tokens,
