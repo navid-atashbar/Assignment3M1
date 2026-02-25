@@ -1,4 +1,8 @@
 """
+Group Members: 
+    Navid Atashbar 58919360
+    Tawann Alvarez 44662328
+    Ryan Sahyoun 22183231
 Tokenizer for processing text into tokens with stemming
 """
 import re
@@ -17,17 +21,6 @@ class Tokenizer:
     def tokenize_and_stem_words(self, words: list) -> list:
         """
         Tokenize and stem a list of words from parser
-        
-        Process:
-        - Extract alphanumeric sequences
-        - Apply quality filters
-        - Apply Porter stemming
-        - No stop word removal (per assignment specs)
-        
-        Args:
-            words: list of word strings from parser
-        Returns:
-            list of stemmed tokens
         """
         tokens = []
         

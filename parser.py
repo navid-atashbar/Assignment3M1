@@ -1,4 +1,8 @@
 """
+Group Members: 
+    Navid Atashbar 58919360
+    Tawann Alvarez 44662328
+    Ryan Sahyoun 22183231
 HTML Parser for extracting text and identifying important words
 """
 import json
@@ -6,7 +10,7 @@ from bs4 import BeautifulSoup
 from typing import Dict, List, Tuple
 
 class HTMLParser:
-    """Parses HTML content and extracts tokens with importance weights"""
+    """Parses HTML content and extracts tokens with importance """
     
     def __init__(self):
         # Tags that indicate important words
@@ -15,7 +19,6 @@ class HTMLParser:
     def parse_json_file(self, filepath: str) -> Dict:
         """
         Parse a JSON file containing URL, content, and encoding
-        Returns: dict with 'url' and 'content' keys
         """
         try:
             with open(filepath, 'r', encoding='utf-8') as f:
@@ -28,7 +31,6 @@ class HTMLParser:
     def extract_text_with_importance(self, html_content: str) -> Tuple[List[str], List[str]]:
         """
         Extract text from HTML, separating normal and important words
-        Returns: (normal_words, important_words)
         """
         if not html_content:
             return [], []
@@ -59,7 +61,6 @@ class HTMLParser:
     def parse_document(self, filepath: str) -> Tuple[str, List[str], List[str]]:
         """
         Parse a document and return URL and words
-        Returns: (url, normal_words, important_words)
         """
         data = self.parse_json_file(filepath)
         if not data:

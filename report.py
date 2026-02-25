@@ -14,9 +14,9 @@ def generate(output):
          Assignment 3: M1 Report
 -------------------------------------------
 Group Members: 
-    Navid Atashbar
-    Tawann Alvarez
-    Ryan Sahyoun
+    Navid Atashbar 58919360
+    Tawann Alvarez 44662328
+    Ryan Sahyoun 22183231
 
 Data: 
 

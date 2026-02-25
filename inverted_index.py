@@ -1,4 +1,8 @@
 """
+Group Members: 
+    Navid Atashbar 58919360
+    Tawann Alvarez 44662328
+    Ryan Sahyoun 22183231
 Inverted Index with disk-based offloading for large-scale indexing
 """
 import json
@@ -11,7 +15,7 @@ import pickle
 class InvertedIndex:
     """
     Inverted index that offloads to disk during construction
-    Designed for the developer option with 56K+ documents
+    Designed for the developer option with 55K+ files
     """
     
     def __init__(self, index_dir: str = "index_data", memory_threshold: int = 5000): #changed to 5000 from 10k can cahnge later
@@ -73,7 +77,6 @@ class InvertedIndex:
     def _offload_to_disk(self):
         """
         Offload current inmemory index to disk as a partial index
-        This is required for the developer option (at least 3 times) REMEMBER
         """
         if not self.index:
             return
