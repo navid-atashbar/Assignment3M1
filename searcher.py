@@ -3,11 +3,23 @@ from nltk.stem import PorterStemmer
 
 class Searcher:
     def __init__(self, index_dir: str = "index_data"):
-        self.index_dir =self._loader_index(index_dir)
+        # self.index_dir =self._loader_index(index_dir)
         self.url_map = self._load_mapper(index_dir)
-    def _loader_index(self, filename: str):
-        with open(f"{filename}/final_index.json", "r") as f:
+        self.lexicon = self._loader_lexicon(index_dir)
+        self.index_file = open(f"{index_dir}/index.txt", "r")
+    def _loader_lexicon(self, index_dir: str):
+        with open(f"{index_dir}/lexicon.json", "r") as f:
             return json.load(f)
+    def _posting(self, word):
+        if word not in self.lexicon:
+            return {}
+        offset = self.lexicon[word]
+        self.index_file.seek(offset)
+        line = self.index_file.readline()
+        return json.loads(line)
+    # def _loader_index(self, filename: str):
+    #     with open(f"{filename}/final_index.json", "r") as f:
+    #         return json.load(f)
     def _load_mapper(self, filename: str):
         with open(f"{filename}/url_map.json", "r") as f:
             return json.load(f)
@@ -20,20 +32,24 @@ class Searcher:
         for words in string_split_lower:
             stemmer = PorterStemmer()
             new_word = stemmer.stem(words)
-            if len(self.index_dir[new_word]) < len_lowest:
+            post = self._posting(new_word)
+            if post and len(post) < len_lowest:
                 lowest_word = new_word
-                len_lowest = len(self.index_dir[new_word])
+                len_lowest = len(post)
         if not lowest_word:
             return []
         #THIS HOLDS THE SET OF DOCS THAT HAVE THE WORD
-        searched_first = set(self.index_dir[lowest_word].keys())
+        searched_first = set(self._posting(lowest_word).keys())
         for words in string_split_lower:
             stemmer = PorterStemmer()
             new_word = stemmer.stem(words)
-            if new_word == lowest_word or new_word not in self.index_dir:
+            if new_word == lowest_word:
                 continue
-            docs_found = set(self.index_dir[new_word].keys())
-            searched_first &= docs_found
+            post = self._posting(new_word)
+            if not post:
+                return []
+            searched_first &= set(post.keys())
+            print(len(searched_first))
         return list(searched_first)[:top_x]
 
     def id_to_links(self, list_ids: list):

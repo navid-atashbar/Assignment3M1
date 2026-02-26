@@ -2,8 +2,9 @@ from searcher import Searcher
 import time
 
 def main():
-    start_time = time.time()
+
     searcher = Searcher()
+    start_time = time.time()
     lists = searcher.search("artificial intelligence")
     print(f"Load time {time.time() - start_time} seconds")
     new_start_time = time.time()
