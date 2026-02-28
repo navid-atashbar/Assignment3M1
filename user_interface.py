@@ -29,3 +29,6 @@ def run():
             i += 1
 
         print()
+
+if __name__ == "__main__":
+    run()
