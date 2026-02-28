@@ -5,7 +5,7 @@ def run():
     start_time = time.time()
     searcher = Searcher()
     print(f"Load time {time.time() - start_time} seconds")
-    print("Type exit to quit\n")
+    print("Type exit to quit")
     while True:
         query = input("Enter query (or 'exit'): ").strip()
         if query.lower() == "exit":

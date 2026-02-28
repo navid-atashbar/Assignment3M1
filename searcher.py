@@ -49,7 +49,7 @@ class Searcher:
             if not post:
                 return []
             searched_first &= set(post.keys())
-            print(len(searched_first))
+            #print(len(searched_first))
         return list(searched_first)[:top_x]
 
     def id_to_links(self, list_ids: list):
