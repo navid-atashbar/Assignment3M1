@@ -48,6 +48,7 @@ class Searcher:
         for words in string_split_lower:
             # stemmer = PorterStemmer()
             new_word = self.stemmer.stem(words)
+
             if new_word == lowest_word:
                 continue
             post = self._posting(new_word)
@@ -55,8 +56,43 @@ class Searcher:
                 return []
             searched_first &= set(post.keys())
             #print(len(searched_first))
+        scores = {}
+        postings = {}
+        candidate_docs = searched_first
 
-        return list(searched_first)[:top_x]
+        for words in string_split_lower:
+            word = self.stemmer.stem(words)
+            postings[word]=self._posting(word)
+            posts = postings[word]
+
+            if not posts:
+                continue
+            df = len(posts)
+
+            if df >0:
+                idf = math.log(self.total_n / df)
+            else:
+                idf = 0
+            for docs_id  in candidate_docs:
+                if docs_id not in posts:
+                    continue
+                entry = posts[docs_id]
+                if entry["tf"] >0:
+                    tf = 1 + math.log(entry["tf"])
+                else:
+                    tf = 0
+                if entry.get("important", False):
+                    boosts = 2.0
+                else:
+                    boosts = 1.0
+                scores[docs_id] = scores.get(docs_id, 0) + (tf* boosts * idf)
+        rank = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:top_x]
+        res = []
+        for doc_id, score in rank:
+            url = self.url_map[doc_id]
+            res.append((url, score))
+        return res
+
 
     def id_to_links(self, list_ids: list):
         links = []
