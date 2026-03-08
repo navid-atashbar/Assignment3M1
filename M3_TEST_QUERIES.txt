@@ -1,0 +1,130 @@
+Good Queries (10 queries)
+
+ 1. "machine learning"
+    Reason: Common topic with clear intent, good document frequency
+
+ 2. "undergraduate programs"
+    Reason: Specific multi-word query with clear meaning
+
+ 3. "computer science"
+    Reason: Core topic with many relevant results
+
+ 4. "faculty research"
+    Reason: Common academic query with good term specificity
+
+ 5. "graduate admission"
+    Reason: Specific informational query
+
+ 6. "artificial intelligence"
+    Reason: Well-defined technical area
+
+ 7. "software engineering courses"
+    Reason: Three-word specific query
+
+ 8. "data structures algorithms"
+    Reason: Core CS topic with multiple relevant terms
+
+ 9. "ICS school events"
+    Reason: Informational query about specific topic
+
+10. "Donald Bren Hall"
+    Reason: Proper noun with clear meaning
+
+Bad Queries Initially (12 queries)
+
+ 1. "informatics"
+    Why tested: Single common word that appears everywhere in ICS domain
+    Problem: Returns too many results with similar scores, hard to rank effectively
+    Fix applied: Added stop word down-weighting (0.3x IDF) for corpus-specific common terms
+
+ 2. "how to apply"
+    Why tested: Contains common words ('how', 'to') that dilute relevance
+    Problem: Common words overwhelm the important word 'apply'
+    Fix applied: Implemented relaxed Boolean AND - only require non-stop-words to intersect
+
+ 3. "professor"
+    Why tested: Single generic word appearing on many faculty/course pages
+    Problem: Too many results with similar TF-IDF scores
+    Fix applied: Added document length normalization to penalize overly long documents
+
+ 4. "AI ML"
+    Why tested: Acronyms without full words
+    Problem: May miss pages using full terms (artificial intelligence, machine learning)
+    Fix applied: Implemented query expansion to automatically include full forms of acronyms
+
+ 5. "cs 121"
+    Why tested: Course number with space
+    Problem: Treated as two separate tokens, may miss 'cs121' or 'cs-121'
+    Fix applied: Added course code normalization with regex to generate combined form
+
+ 6. "informatics major requirements"
+    Why tested: Long query where all words are common in academic context
+    Problem: No single term is distinctive enough to rank well
+    Fix applied: Combined stop word handling + original term weighting (1.5x boost)
+
+ 7. "computer"
+    Why tested: Partial word - too generic in CS context
+    Problem: Returns too generic results, appears in almost every page
+    Fix applied: Applied stop word down-weighting as 'computer' is corpus-specific stop word
+
+ 8. "research opportunities undergraduate"
+    Why tested: All common words in academic domain
+    Problem: Each word appears frequently, hard to distinguish relevant pages
+    Fix applied: Document length normalization + importance boosting (2.5x for titles)
+
+ 9. "curriculum"
+    Why tested: Single educational term appearing on every program page
+    Problem: Every program page mentions curriculum - no discriminative power
+    Fix applied: Stop word down-weighting + enhanced importance boost for title matches
+
+10. "uci"
+    Why tested: Extremely common term (appears on almost every page in corpus)
+    Problem: Acts as a stop word for this corpus, all pages score similarly
+    Fix applied: Added to stop word list with 0.3x IDF penalty
+
+11. "ics 33 python programming"
+    Why tested: Mixture of course code and common terms
+    Problem: Course code + common terms 'python' + generic 'programming'
+    Fix applied: Course code normalization + term weighting for original query terms
+
+12. "when are finals"
+    Why tested: Natural language question with common words
+    Problem: Stop words reduce relevance, question format not handled
+    Fix applied: Relaxed Boolean AND for stop-word-heavy queries + stop word down-weighting
+
+
+SUMMARY OF IMPROVEMENTS
+
+1. Stop Word Detection and Down-weighting
+   - Identified corpus-specific common terms (uci, ics, informatics, computer, etc.)
+   - Reduced IDF weight by 70% for these terms
+   - Impact: Prevents common terms from dominating rankings
+
+2. Query Expansion for Acronyms
+   - Automatic expansion of common acronyms (AI, ML, HCI, NLP, etc.)
+   - Searches for both acronym and full term
+   - Impact: Improves recall for acronym queries
+
+3. Course Code Normalization
+   - Regex pattern to detect 'dept + number' format
+   - Generates combined form (cs122) from spaced form (cs 122)
+   - Impact: Handles various course code formats
+
+4. Relaxed Boolean AND for Stop-Word Queries
+   - Only requires intersection on meaningful terms
+   - Falls back to union if intersection is empty
+   - Impact: Prevents no-result scenarios
+
+5. Enhanced Importance Boosting
+   - Increased boost from 2.0x to 2.5x for title/heading terms
+   - Impact: Stronger signal for page relevance
+
+6. Original Term Weighting
+   - 1.5x weight for user's actual query terms vs expanded terms
+   - Impact: Maintains query intent while benefiting from expansion
+
+7. Document Length Normalization
+   - Penalty for documents with > 100 matching terms
+   - Formula: score / (1 + log(total_terms/100))
+   - Impact: Prevents long documents from dominating results
+
