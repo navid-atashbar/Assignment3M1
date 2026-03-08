@@ -14,20 +14,22 @@ def run():
             print("enter valid query\n")
             continue
         new_start_time = time.time()
-        lists = searcher.search(query)
-        url = searcher.id_to_links(lists)
+        #lists = searcher.search(query)
+        #url = searcher.id_to_links(lists)
+        url = searcher.search(query)
         search_time = time.time() - new_start_time
         if not url:
             print("No restults found \n")
             continue
         print(f"\nSearch completed in {search_time:.4f} seconds")
         i = 0
-        for n in url:
-            if i >= 5:
-                break
-            print(f"{i + 1}. {n}")
-            i += 1
-
+        #for n in url:
+       #     if i >= 5:
+       #         break
+       #     print(f"{i + 1}. {n}")
+       #     i += 1
+        for i, (n,score) in enumerate(url):
+            print(f"{i+1}. {n}")
         print()
 
 if __name__ == "__main__":
