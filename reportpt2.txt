@@ -26,7 +26,7 @@ Search completed in 0.0163 seconds
 4. https://grape.ics.uci.edu/wiki/public/wiki/cs222-2017-fall?version=107
 5. https://grape.ics.uci.edu/wiki/public/wiki/cs222-2018-fall?version=42
 
-Enter query (or 'exit'): master of software engineering
+Enter query (or 'exit'): ACM
 
 Search completed in 0.2049 seconds
 1. https://www.informatics.uci.edu/global-game-jam-connects-uci-with-ocs-game-design-community/

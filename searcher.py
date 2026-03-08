@@ -1,5 +1,6 @@
 import json
 from nltk.stem import PorterStemmer
+import math
 
 class Searcher:
     def __init__(self, index_dir: str = "index_data"):
@@ -7,6 +8,10 @@ class Searcher:
         self.url_map = self._load_mapper(index_dir)
         self.lexicon = self._loader_lexicon(index_dir)
         self.index_file = open(f"{index_dir}/index.txt", "r")
+        self.stemmer = PorterStemmer()
+        with open(f"{index_dir}/statistics.json", "r") as f:
+            self.statistics = json.load(f)
+        self.total_n = self.statistics["num_documents"]
     def _loader_lexicon(self, index_dir: str):
         with open(f"{index_dir}/lexicon.json", "r") as f:
             return json.load(f)
@@ -30,8 +35,8 @@ class Searcher:
         lowest_word = ""
         len_lowest = 9999999999999999999999
         for words in string_split_lower:
-            stemmer = PorterStemmer()
-            new_word = stemmer.stem(words)
+            #stemmer = PorterStemmer()
+            new_word = self.stemmer.stem(words)
             post = self._posting(new_word)
             if post and len(post) < len_lowest:
                 lowest_word = new_word
@@ -41,8 +46,8 @@ class Searcher:
         #THIS HOLDS THE SET OF DOCS THAT HAVE THE WORD
         searched_first = set(self._posting(lowest_word).keys())
         for words in string_split_lower:
-            stemmer = PorterStemmer()
-            new_word = stemmer.stem(words)
+            # stemmer = PorterStemmer()
+            new_word = self.stemmer.stem(words)
             if new_word == lowest_word:
                 continue
             post = self._posting(new_word)
@@ -50,6 +55,7 @@ class Searcher:
                 return []
             searched_first &= set(post.keys())
             #print(len(searched_first))
+
         return list(searched_first)[:top_x]
 
     def id_to_links(self, list_ids: list):
