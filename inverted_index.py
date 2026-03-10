@@ -10,6 +10,7 @@ import os
 from collections import defaultdict
 from typing import Dict, List, Set
 import pickle
+import hashlib
 #test
 
 class InvertedIndex:
@@ -41,13 +42,30 @@ class InvertedIndex:
         self.unique_tokens = 0
         self.size_on_disk = 0
         
+        # EXTRA CREDIT: Duplicate detection
+        self.content_hashes = set()  # Store hashes of content we've seen
+        self.duplicate_count = 0     # Count duplicates found
+        
         # Create index directory
         os.makedirs(self.index_dir, exist_ok=True)
     
     def add_document(self, url: str, tokens: List[str], important_tokens: List[str]):
         """
         Add a document to the index
+        EXTRA CREDIT: Now includes exact duplicate detection
         """
+        # EXTRA CREDIT: Check for exact duplicates
+        content_string = ' '.join(sorted(tokens))  # Sort for consistency
+        content_hash = hashlib.md5(content_string.encode('utf-8')).hexdigest()
+        
+        if content_hash in self.content_hashes:
+            # This is a duplicate! Skip indexing it
+            self.duplicate_count += 1
+            return  # Don't index this document
+        
+        # Not a duplicate, add to our set of seen content
+        self.content_hashes.add(content_hash)
+        
         # Assign document ID
         current_doc_id = self.doc_id
         self.url_map[current_doc_id] = url
@@ -167,7 +185,8 @@ class InvertedIndex:
             'num_documents': self.total_docs,
             'num_unique_tokens': self.unique_tokens,
             'num_partial_indexes_created': self.partial_index_count,
-            'index_size_kb': self.get_index_size_kb()
+            'index_size_kb': self.get_index_size_kb(),
+            'duplicates_detected': self.duplicate_count  # EXTRA CREDIT
         }
         
         stats_file = os.path.join(self.index_dir, "statistics.json")
@@ -175,6 +194,8 @@ class InvertedIndex:
             json.dump(stats, f, indent=2)
         
         print(f"\nStatistics saved to {stats_file}")
+        if self.duplicate_count > 0:
+            print(f"EXTRA CREDIT: Detected and skipped {self.duplicate_count} exact duplicate pages!")
     
     def get_index_size_kb(self):
         """

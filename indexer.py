@@ -59,6 +59,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     size_kb = index.get_index_size_kb()
     print(f"\n Summary DONE!")
     print(f"Documents indexed : {index.total_docs}")
+    print(f"Duplicates skipped: {index.duplicate_count} (EXTRA CREDIT)")
     print(f"Unique tokens     : {index.unique_tokens}")
     print(f"Index size on disk: {size_kb:.2f} KB")
     print(f"Index saved to    : {os.path.abspath(index_dir)}/")
