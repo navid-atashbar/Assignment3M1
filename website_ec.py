@@ -7,7 +7,19 @@ searcher = Searcher()
 HTML = """
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Search</title></head>
+<head>
+    <title>Search</title>
+    <style>
+    body {
+            text-align: center;
+            margin-top: 50px
+        }
+        .results {
+            text-align: center;
+            margin: 20px auto;
+    </style>
+    
+</head>
 <body>
     <h1>Zotgle</h1>
     <form action="/search" method="GET">
@@ -15,6 +27,7 @@ HTML = """
         <button type="submit">Search</button>
     </form>
     {% if results is not none %}
+        <div class="results">
         <p> Here are the top 5 results in {{time}} secs</p>
         {% for url,score in results %}
             <p> {{loop.index}}. <a href="{{ url }}">{{ url }}</a> (score: {{ score }})</p>
@@ -22,6 +35,7 @@ HTML = """
         {% if not results %}
             <p> Found NO results</p>
         {% endif %}
+        </div>
     {% endif %}
     
     </body>
@@ -35,7 +49,7 @@ HTML = """
     """
 @app.route("/")
 def index():
-    return render_template_string(HTML)
+    return render_template_string(HTML,query="", results=None, time=0)
 @app.route("/search")
 def search():
     q = request.args.get("q", "").strip()
@@ -44,7 +58,7 @@ def search():
     start = time.time()
     results = searcher.search(q)
     elapsed = f"{time.time() - start}"
-    return render_template_string(HTML,query="", results=results, elapsed=elapsed)
+    return render_template_string(HTML,query="", results=results, time=elapsed)
 if __name__ == "__main__":
     app.run(debug=True)
 #TO RUN THIS RUN THIS FILE AND IN YOUR BROWSER PASTE THIS
