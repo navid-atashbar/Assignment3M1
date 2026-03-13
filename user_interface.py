@@ -19,7 +19,7 @@ def run():
         url = searcher.search(query)
         search_time = time.time() - new_start_time
         if not url:
-            print("No restults found \n")
+            print("No results found \n")
             continue
         print(f"\nSearch completed in {search_time:.4f} seconds")
         i = 0
@@ -29,7 +29,7 @@ def run():
        #     print(f"{i + 1}. {n}")
        #     i += 1
         for i, (n,score) in enumerate(url):
-            print(f"{i+1}. {n}")
+            print(f"{i+1}. {n} (score: {score})")
         print()
 
 if __name__ == "__main__":
