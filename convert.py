@@ -11,3 +11,4 @@ with open("index_data/index.txt", "w") as f:
 
 with open("index_data/lexicon.json", "w") as f:
     json.dump(lex, f)
+    print("Success: converted successfully")

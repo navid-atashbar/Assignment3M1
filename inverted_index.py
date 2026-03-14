@@ -52,33 +52,30 @@ class InvertedIndex:
     def add_document(self, url: str, tokens: List[str], important_tokens: List[str]):
         """
         Add a document to the index
-        EXTRA CREDIT: Now includes exact duplicate detection
+        and the ec for duplication
         """
-        # EXTRA CREDIT: Check for exact duplicates
-        content_string = ' '.join(sorted(tokens))  # Sort for consistency
+
+        content_string = ' '.join((tokens))
         content_hash = hashlib.md5(content_string.encode('utf-8')).hexdigest()
         
         if content_hash in self.content_hashes:
-            # This is a duplicate! Skip indexing it
             self.duplicate_count += 1
-            return  # Don't index this document
+            return
         
-        # Not a duplicate, add to our set of seen content
+
         self.content_hashes.add(content_hash)
         
-        # Assign document ID
+
         current_doc_id = self.doc_id
         self.url_map[current_doc_id] = url
         self.doc_id += 1
         self.total_docs += 1
         
-        # Count term frequencies for normal tokens
+
         token_freq = defaultdict(int)
         for token in tokens:
             token_freq[token] += 1
-            # self.unique_tokens.add(token)
-        
-        # Track which tokens are important
+
         important_set = set(important_tokens)
         
         # Add to inverted index
@@ -88,7 +85,7 @@ class InvertedIndex:
                 'important': token in important_set
             }
         
-        # Check if we need to offload to disk
+
         if self.total_docs % self.memory_threshold == 0:
             self._offload_to_disk()
     
@@ -195,7 +192,7 @@ class InvertedIndex:
         
         print(f"\nStatistics saved to {stats_file}")
         if self.duplicate_count > 0:
-            print(f"EXTRA CREDIT: Detected and skipped {self.duplicate_count} exact duplicate pages!")
+            print(f"EC: skipped {self.duplicate_count} duplicates")
     
     def get_index_size_kb(self):
         """

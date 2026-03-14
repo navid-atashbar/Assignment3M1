@@ -1,7 +1,7 @@
 
 import indexer
 from report import generate
-INDEX_PATH = '../index_data'
+INDEX_PATH = './index_data'
 
 def main():
     indexer.build_index(data_dir="./DEV")
