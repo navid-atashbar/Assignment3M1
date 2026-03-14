@@ -56,6 +56,7 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     total_time_taken = time.time() - start_time
     merging_time = time.time() - time_taken
     # Print data
+    index._save_statistics(total_time_taken,merging_time)
     size_kb = index.get_index_size_kb()
     print(f"\n Summary DONE!")
     print(f"Documents indexed : {index.total_docs}")
@@ -65,12 +66,13 @@ def build_index(data_dir: str = "DEV", index_dir: str = "index_data"):
     print(f"Index saved to    : {os.path.abspath(index_dir)}/")
     print(f"Time took to run program : {time.time() - start_time:.2f} seconds")
     #Write
-    with open("./index_data/statistics.json", "r") as f:
-        stats = json.load(f)
-    stats["time_taken"]= total_time_taken
-    stats["Merge index time"] = merging_time
-    with open("./index_data/statistics.json", "w") as f:
-        json.dump(stats, f,indent=2)
+    #################
+    #with open("./index_data/statistics.json", "r") as f:
+    #    stats = json.load(f)
+    #stats["time_taken"]= total_time_taken
+    #stats["Merge index time"] = merging_time
+    #with open("./index_data/statistics.json", "w") as f:
+    #    json.dump(stats, f,indent=2)
 
 if __name__ == "__main__":
     build_index(data_dir="./DEV")

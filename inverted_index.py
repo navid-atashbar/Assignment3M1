@@ -138,7 +138,7 @@ class InvertedIndex:
             self._merge_partial_indexes()
         
         # Save statistics
-        self._save_statistics()
+       # self._save_statistics(time_taken,merge_time)
         
         # print(f"Index finalized!")
         # print(f"Total documents indexed: {self.total_docs}")
@@ -173,7 +173,7 @@ class InvertedIndex:
 
             except:
                 pass
-    def _save_statistics(self):
+    def _save_statistics(self,time_taken=0, merge_time=0):
         """
         Save statistics for the report
         """
@@ -183,7 +183,9 @@ class InvertedIndex:
             'num_unique_tokens': self.unique_tokens,
             'num_partial_indexes_created': self.partial_index_count,
             'index_size_kb': self.get_index_size_kb(),
-            'duplicates_detected': self.duplicate_count  # EXTRA CREDIT
+            'duplicates_detected': self.duplicate_count,  # EXTRA CREDIT
+            'time_taken': time_taken,
+            'merge_time': merge_time
         }
         
         stats_file = os.path.join(self.index_dir, "statistics.json")
