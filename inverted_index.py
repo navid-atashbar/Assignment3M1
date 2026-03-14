@@ -8,8 +8,7 @@ Inverted Index with disk-based offloading for large-scale indexing
 import json
 import os
 from collections import defaultdict
-from typing import Dict, List, Set
-import pickle
+
 import hashlib
 #test
 
@@ -49,7 +48,7 @@ class InvertedIndex:
         # Create index directory
         os.makedirs(self.index_dir, exist_ok=True)
     
-    def add_document(self, url: str, tokens: List[str], important_tokens: List[str]):
+    def add_document(self, url, tokens, important_tokens):
         """
         Add a document to the index
         and the ec for duplication
