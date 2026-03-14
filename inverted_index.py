@@ -42,9 +42,8 @@ class InvertedIndex:
         self.unique_tokens = 0
         self.size_on_disk = 0
         
-        # EXTRA CREDIT: Duplicate detection
-        self.content_hashes = set()  # Store hashes of content we've seen
-        self.duplicate_count = 0     # Count duplicates found
+        self.content_hashes = set()
+        self.duplicate_count = 0
         
         # Create index directory
         os.makedirs(self.index_dir, exist_ok=True)
@@ -52,30 +51,25 @@ class InvertedIndex:
     def add_document(self, url: str, tokens: List[str], important_tokens: List[str]):
         """
         Add a document to the index
-        and the ec for duplication
         """
-
-        content_string = ' '.join((tokens))
+        content_string = ' '.join(sorted(tokens))
         content_hash = hashlib.md5(content_string.encode('utf-8')).hexdigest()
         
         if content_hash in self.content_hashes:
             self.duplicate_count += 1
             return
         
-
         self.content_hashes.add(content_hash)
         
-
         current_doc_id = self.doc_id
         self.url_map[current_doc_id] = url
         self.doc_id += 1
         self.total_docs += 1
         
-
         token_freq = defaultdict(int)
         for token in tokens:
             token_freq[token] += 1
-
+        
         important_set = set(important_tokens)
         
         # Add to inverted index
@@ -85,7 +79,6 @@ class InvertedIndex:
                 'important': token in important_set
             }
         
-
         if self.total_docs % self.memory_threshold == 0:
             self._offload_to_disk()
     
@@ -183,7 +176,7 @@ class InvertedIndex:
             'num_unique_tokens': self.unique_tokens,
             'num_partial_indexes_created': self.partial_index_count,
             'index_size_kb': self.get_index_size_kb(),
-            'duplicates_detected': self.duplicate_count  # EXTRA CREDIT
+            'duplicates_detected': self.duplicate_count
         }
         
         stats_file = os.path.join(self.index_dir, "statistics.json")
@@ -192,7 +185,7 @@ class InvertedIndex:
         
         print(f"\nStatistics saved to {stats_file}")
         if self.duplicate_count > 0:
-            print(f"EC: skipped {self.duplicate_count} duplicates")
+            print(f"Detected {self.duplicate_count} exact duplicates (skipped during indexing)")
     
     def get_index_size_kb(self):
         """
